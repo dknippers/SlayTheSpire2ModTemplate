@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Slay the Spire 2 directories">
+    <!-- Set these in ModName.csproj.user -->
+    <Sts2Dir><!-- Path to Slay the Spire 2 installation directory --></Sts2Dir>
+    <Sts2DataDir><!-- Path to Slay the Spire 2 data directory --></Sts2DataDir>
+    <Sts2ModDir>$(Sts2Dir)\mods</Sts2ModDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="$(Sts2DataDir)\0Harmony.dll" />
+    <Reference Include="$(Sts2DataDir)\GodotSharp.dll" />
+    <Reference Include="$(Sts2DataDir)\sts2.dll" />
+  </ItemGroup>
+
+  <Target Name="CopyModFiles" AfterTargets="Build" Condition="'$(Sts2Dir)' != ''">
+    <PropertyGroup>
+      <ModOutputDir>$(Sts2ModDir)\ModName</ModOutputDir>
+      <AssetsDir>$(MSBuildProjectDirectory)\..\assets</AssetsDir>
+    </PropertyGroup>
+
+    <RemoveDir Directories="$(ModOutputDir)" />
+    <MakeDir Directories="$(ModOutputDir)" />
+
+    <ItemGroup>
+      <AssetFiles Include="$(AssetsDir)\**\*" />
+    </ItemGroup>
+
+    <Copy
+      SourceFiles="@(AssetFiles)"
+      DestinationFiles="@(AssetFiles->'$(ModOutputDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="false"
+    />
+
+    <Copy
+      SourceFiles="$(TargetPath)"
+      DestinationFolder="$(ModOutputDir)"
+    />
+
+    <Message Text="Mod files copied to $(ModOutputDir)" Importance="high" />
+  </Target>
+
+</Project>

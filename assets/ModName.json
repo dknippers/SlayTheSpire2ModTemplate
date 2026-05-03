@@ -1,0 +1,11 @@
+{
+  "id": "ModName",
+  "name": "ModName",
+  "author": "MOD_AUTHOR_HERE",
+  "description": "MOD_DESCRIPTION_HERE",
+  "version": "v0.0.1",
+  "has_pck": false,
+  "has_dll": true,
+  "dependencies": [],
+  "affects_gameplay": false
+}
